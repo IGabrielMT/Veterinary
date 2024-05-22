@@ -1,27 +1,34 @@
 package co.edu.uptc.view.registerAppointmentVet;
 
+import co.edu.uptc.view.wildCardClasses.CustomButton;
 import co.edu.uptc.view.wildCardClasses.Global;
 import co.edu.uptc.view.wildCardClasses.LimitedTextField;
 import com.toedter.calendar.JDateChooser;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.swing.*;
 import java.awt.*;
 @Getter
+@Setter
 public class WorkPanelAppointmentVet extends JPanel {
-    private final JComboBox<String> petType;
-    private final JComboBox<String> vaccinesNum;
-    private final JComboBox<String> vaccines;
+    private JComboBox<String> petType;
+    private JComboBox<String> vaccinesNum;
+    private JComboBox<String> vaccines;
     private LimitedTextField ownerName;
     private LimitedTextField petName;
     private JDateChooser dateChooser;
-    public WorkPanelAppointmentVet(JComboBox<String> petType, JComboBox<String> vaccines, JComboBox<String> vaccinesNum){
-        this.vaccines = vaccines;
-        this.petType = petType;
-        this.vaccinesNum = vaccinesNum;
+    private JDialog parent;
+    public WorkPanelAppointmentVet(JDialog parent){
+        this.parent = parent;
+        this.parent = getParent();
+    }
+
+    public void buildPanel() {
         initWorkPanel();
         createLabelAndText();
         requestFocusInWindow();
+        addButtons();
     }
 
     private void initWorkPanel() {
@@ -37,8 +44,6 @@ public class WorkPanelAppointmentVet extends JPanel {
         for (int i = 0; i < 4; i++) {
             createEmptySpace(gridPanel);
         }
-
-
         int marginSize = 50; // Create a margin size
         JPanel marginPanel = new JPanel(new BorderLayout());
         marginPanel.add(gridPanel, BorderLayout.CENTER);
@@ -80,6 +85,24 @@ public class WorkPanelAppointmentVet extends JPanel {
         gridPanel.add(vaccines);
         dateChooser = new JDateChooser();
         gridPanel.add(dateChooser);
+    }
+    private void addButtons(){
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        buttonPanel.add(createButtonRegister());
+        buttonPanel.add(createButtonReturn());
+        add(buttonPanel, BorderLayout.SOUTH);
+    }
+    private JButton createButtonRegister(){
+        CustomButton button = new CustomButton("Registrar Cita");
+        button.addActionListener(e -> {
+            // Add the logic to register the appointment
+        });
+        return button;
+    }
+    private JButton createButtonReturn() {
+        CustomButton button = new CustomButton("Volver");
+        button.addActionListener(e -> parent.dispose());
+        return button;
     }
 
 }

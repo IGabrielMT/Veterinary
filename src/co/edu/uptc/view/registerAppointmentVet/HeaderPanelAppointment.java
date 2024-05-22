@@ -6,15 +6,11 @@ import co.edu.uptc.view.wildCardClasses.LabelHeader;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class HeaderPanelAppointment extends JPanel{
     private JPanel headerLabelsPanel;
     private JPanel titlePanel;
-    private final JDialog parentDialog;
-    public HeaderPanelAppointment(JDialog parentDialog){
-        this.parentDialog = parentDialog;
+    public HeaderPanelAppointment(){
         initComponents();
         createPanelHeaderLabels();
         createLabelAddVaccines();
@@ -42,13 +38,7 @@ public class HeaderPanelAppointment extends JPanel{
         this.add(headerLabelsPanel, BorderLayout.CENTER);
     }
     private void createLabelViewDates(){
-        JLabel label =  new LabelHeader("Inicio");
-        label.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                parentDialog.dispose();
-            }
-        });
+        JLabel label =  new LabelHeader("Añadir Vacunas");
         headerLabelsPanel.add(label);
     }
     private void createLabelAddVaccines(){

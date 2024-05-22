@@ -3,7 +3,6 @@ package co.edu.uptc.view.registerAppointmentVet;
 import co.edu.uptc.view.mainpage.MainPageFrame;
 import co.edu.uptc.view.wildCardClasses.CustomJComboBox;
 
-import javax.crypto.CipherInputStream;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -33,14 +32,15 @@ public class RegisterAppointmentMainPage extends JDialog {
         return new Dimension((int)width, (int)height);
     }
     private void createHeaderPanel(){
-        HeaderPanelAppointment headerPanel = new HeaderPanelAppointment(this);
+        HeaderPanelAppointment headerPanel = new HeaderPanelAppointment();
         this.add(headerPanel, BorderLayout.NORTH);
     }
     private void createWorkPanel(){
-        JComboBox<String> petType = new CustomJComboBox(new String[]{"Perro", "Gato", "Conejo", "Hamster", "Cobayo"});
-        JComboBox<String> vaccines = new CustomJComboBox(new String[]{"Rabia", "Moquillo", "Hepatitis", "Parvovirus", "Leptospirosis"});
-        JComboBox<String> vaccinesNum = new CustomJComboBox(new String[]{"1", "2", "3", "4", "5"});
-        WorkPanelAppointmentVet workPanel = new WorkPanelAppointmentVet(petType, vaccines, vaccinesNum);
+        WorkPanelAppointmentVet workPanel = new WorkPanelAppointmentVet(this);
+        workPanel.setPetType(new CustomJComboBox(new String[]{"Perro", "Gato"}));
+        workPanel.setVaccines(new CustomJComboBox(new String[]{"Vacuna 1", "Vacuna 2"}));
+        workPanel.setVaccinesNum(new CustomJComboBox(new String[]{"1", "2", "3", "4", "5"}));
+        workPanel.buildPanel();
         this.add(workPanel, BorderLayout.CENTER);
     }
     private void fadeIn() {
