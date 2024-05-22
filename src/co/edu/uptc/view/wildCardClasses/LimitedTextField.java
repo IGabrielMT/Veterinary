@@ -47,7 +47,7 @@ public class LimitedTextField extends JTextField {
         if(getText().isEmpty() && ! (FocusManager.getCurrentKeyboardFocusManager().getFocusOwner() == this)){
             Graphics2D g2 = (Graphics2D)g.create();
             g2.setColor(Color.gray); //Color of the placeholder
-            g2.setFont(Global.FONT_TEXTS);
+            g2.setFont(Global.FONT_TEXTS_SMALL);
             g2.drawString(placeholder, 5, 20); //draws placeholder
             g2.dispose();
         }
