@@ -1,11 +1,15 @@
 package co.edu.uptc.view.mainpage;
 
+import co.edu.uptc.view.addVaccines.MainAddVaccines;
+import co.edu.uptc.view.appointments.allAppointments.MainAllAppointments;
 import co.edu.uptc.view.wildCardClasses.CustomButton;
 import co.edu.uptc.view.wildCardClasses.Global;
 import co.edu.uptc.view.wildCardClasses.LabelHeader;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class HeaderPanel extends JPanel{
     private JPanel headerLabelsPanel;
@@ -39,10 +43,21 @@ public class HeaderPanel extends JPanel{
     }
     private void createLabelViewDates(){
         JLabel label =  new LabelHeader("Ver Citas");
+        label.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                addAppointments();
+            }
+        });
         headerLabelsPanel.add(label);
     }
     private void createLabelAddVaccines(){
         JLabel label =  new LabelHeader("Agregar Vacunas");
+        label.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent evt) {
+                addVaccine();
+            }
+        });
         headerLabelsPanel.add(label);
     }
     private void createTitlePanel(){
@@ -63,5 +78,14 @@ public class HeaderPanel extends JPanel{
         button.addActionListener(e -> System.exit(0));
         headerLabelsPanel.add(button);
     }
+    private void addVaccine(){
+        MainAddVaccines mainAddVaccines = new MainAddVaccines();
+        mainAddVaccines.setVisible(true);
+    }
+    private void addAppointments(){
+        MainAllAppointments mainAllAppointments = new MainAllAppointments();
+        mainAllAppointments.setVisible(true);
+    }
+
 
 }

@@ -1,6 +1,5 @@
-package co.edu.uptc.view.registerAppointmentVet;
+package co.edu.uptc.view.addVaccines;
 
-import co.edu.uptc.view.addVaccines.MainAddVaccines;
 import co.edu.uptc.view.wildCardClasses.CustomButton;
 import co.edu.uptc.view.wildCardClasses.Global;
 import co.edu.uptc.view.wildCardClasses.LabelHeader;
@@ -10,11 +9,11 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class HeaderPanelAppointment extends JPanel{
+public class HeaderPanelAddVaccines extends JPanel{
     private JPanel headerLabelsPanel;
     private JPanel titlePanel;
-    private final JDialog parent;
-    public HeaderPanelAppointment(JDialog parent){
+    private JDialog parent;
+    public HeaderPanelAddVaccines(JDialog parent){
         this.parent = parent;
         initComponents();
         createPanelHeaderLabels();
@@ -43,18 +42,17 @@ public class HeaderPanelAppointment extends JPanel{
         this.add(headerLabelsPanel, BorderLayout.CENTER);
     }
     private void createLabelViewDates(){
-        JLabel label =  new LabelHeader("Añadir Vacunas");
-        label.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                parent.dispose();
-                createVaccines();
-            }
-        });
+        JLabel label =  new LabelHeader("Ver Citas");
         headerLabelsPanel.add(label);
     }
     private void createLabelAddVaccines(){
-        JLabel label =  new LabelHeader("Ver Citas");
+        JLabel label =  new LabelHeader("Inicio");
+        label.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent event){
+                parent.dispose();
+            }
+        });
         headerLabelsPanel.add(label);
     }
     private void createTitlePanel(){
@@ -75,8 +73,5 @@ public class HeaderPanelAppointment extends JPanel{
         button.addActionListener(e -> System.exit(0));
         headerLabelsPanel.add(button);
     }
-    private void createVaccines(){
-        MainAddVaccines mainAddVaccines = new MainAddVaccines();
-        mainAddVaccines.setVisible(true);
-    }
+
 }

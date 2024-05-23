@@ -1,29 +1,28 @@
-package co.edu.uptc.view.registerAppointmentVet;
+package co.edu.uptc.view.addVaccines;
 
 import co.edu.uptc.view.mainpage.MainPageFrame;
 import co.edu.uptc.view.wildCardClasses.CustomJComboBox;
+import com.toedter.calendar.JDateChooser;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class RegisterAppointmentMainPage extends JDialog {
-    public RegisterAppointmentMainPage(){
+public class MainAddVaccines extends JDialog {
+    public MainAddVaccines() {
         super(MainPageFrame.getInstance(), true);
         initComponents();
         createHeaderPanel();
         createWorkPanel();
-        this.setOpacity(0);
-        fadeIn();
     }
     private void initComponents(){
-        this.setTitle("Registrar Cita");
         this.setSize(obtainSize());
         this.setUndecorated(true);
         this.setLayout(new BorderLayout());
         this.setLocationRelativeTo(null);
         this.setResizable(false);
+        fadeIn();
     }
     private Dimension obtainSize(){
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -32,16 +31,16 @@ public class RegisterAppointmentMainPage extends JDialog {
         return new Dimension((int)width, (int)height);
     }
     private void createHeaderPanel(){
-        HeaderPanelAppointment headerPanel = new HeaderPanelAppointment(this);
+        HeaderPanelAddVaccines headerPanel = new HeaderPanelAddVaccines(this);
         this.add(headerPanel, BorderLayout.NORTH);
     }
     private void createWorkPanel(){
-        WorkPanelAppointmentVet workPanelAppointmentVet = new WorkPanelAppointmentVet(this);
-        workPanelAppointmentVet.setPetType(new CustomJComboBox(new String[]{"Perro", "Gato"}));
-        workPanelAppointmentVet.setVaccinesNum(new CustomJComboBox(new String[]{"1", "2", "3", "4"}));
-        workPanelAppointmentVet.setVaccines(new CustomJComboBox(new String[]{"Rabia", "Moquillo", "Hepatitis", "Parvovirus"}));
-        workPanelAppointmentVet.buildPanel();
-        add(workPanelAppointmentVet, BorderLayout.CENTER);
+        WorkPanelAddVaccines workPanel = new WorkPanelAddVaccines();
+        workPanel.setDueDate(new JDateChooser());
+        CustomJComboBox petType = new CustomJComboBox(new String[]{"Perro", "Gato"});
+        workPanel.setPetType(petType);
+        workPanel.build();
+        this.add(workPanel, BorderLayout.CENTER);
     }
     private void fadeIn() {
         Timer timer = new Timer(10, new ActionListener() {
@@ -57,4 +56,5 @@ public class RegisterAppointmentMainPage extends JDialog {
         });
         timer.start();
     }
+
 }
