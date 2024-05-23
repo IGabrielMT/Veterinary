@@ -1,6 +1,7 @@
 package co.edu.uptc.view.registerAppointmentVet;
 
 import co.edu.uptc.view.wildCardClasses.CustomButton;
+import co.edu.uptc.view.wildCardClasses.CustomJComboBox;
 import co.edu.uptc.view.wildCardClasses.Global;
 import co.edu.uptc.view.wildCardClasses.LimitedTextField;
 import com.toedter.calendar.JDateChooser;
@@ -12,25 +13,22 @@ import java.awt.*;
 @Getter
 @Setter
 public class WorkPanelAppointmentVet extends JPanel {
-    private JComboBox<String> petType;
-    private JComboBox<String> vaccinesNum;
-    private JComboBox<String> vaccines;
+    private CustomJComboBox petType;
+    private CustomJComboBox vaccinesNum;
+    private CustomJComboBox vaccines;
     private LimitedTextField ownerName;
     private LimitedTextField petName;
     private JDateChooser dateChooser;
     private JDialog parent;
     public WorkPanelAppointmentVet(JDialog parent){
         this.parent = parent;
-        this.parent = getParent();
     }
-
     public void buildPanel() {
         initWorkPanel();
         createLabelAndText();
         requestFocusInWindow();
         addButtons();
     }
-
     private void initWorkPanel() {
         setBackground(Global.WORK_BACKGROUND_COLOR);
         setForeground(Global.WORK_TEXT_COLOR);

@@ -36,12 +36,12 @@ public class RegisterAppointmentMainPage extends JDialog {
         this.add(headerPanel, BorderLayout.NORTH);
     }
     private void createWorkPanel(){
-        WorkPanelAppointmentVet workPanel = new WorkPanelAppointmentVet(this);
-        workPanel.setPetType(new CustomJComboBox(new String[]{"Perro", "Gato"}));
-        workPanel.setVaccines(new CustomJComboBox(new String[]{"Vacuna 1", "Vacuna 2"}));
-        workPanel.setVaccinesNum(new CustomJComboBox(new String[]{"1", "2", "3", "4", "5"}));
-        workPanel.buildPanel();
-        this.add(workPanel, BorderLayout.CENTER);
+        WorkPanelAppointmentVet workPanelAppointmentVet = new WorkPanelAppointmentVet(this);
+        workPanelAppointmentVet.setPetType(new CustomJComboBox(new String[]{"Perro", "Gato"}));
+        workPanelAppointmentVet.setVaccinesNum(new CustomJComboBox(new String[]{"1", "2", "3", "4"}));
+        workPanelAppointmentVet.setVaccines(new CustomJComboBox(new String[]{"Rabia", "Moquillo", "Hepatitis", "Parvovirus"}));
+        workPanelAppointmentVet.buildPanel();
+        add(workPanelAppointmentVet, BorderLayout.CENTER);
     }
     private void fadeIn() {
         Timer timer = new Timer(10, new ActionListener() {
