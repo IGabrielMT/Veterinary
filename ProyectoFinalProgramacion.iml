@@ -10,5 +10,6 @@
     <orderEntry type="library" name="ManagerProperties" level="project" />
     <orderEntry type="library" name="jcalendar-1.4" level="project" />
     <orderEntry type="library" name="lombok-1.18.32" level="project" />
+    <orderEntry type="library" name="gson-2.11.0" level="project" />
   </component>
 </module>

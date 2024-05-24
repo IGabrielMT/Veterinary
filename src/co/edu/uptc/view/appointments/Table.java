@@ -13,7 +13,7 @@ public class Table {
         createTable();
     }
     private void createTable() {
-        String[] columnNames = {"Documento", "Nombre", "Apellido", "Fecha de Nacimiento", "Genero"};
+        String[] columnNames = {"Responsable", "Nombre de la Mascota", "Vacunas Usadas", "Dia de la Cita"};
         DefaultTableModel model = new DefaultTableModel(null, columnNames);
         table = new JTable(model);
     }

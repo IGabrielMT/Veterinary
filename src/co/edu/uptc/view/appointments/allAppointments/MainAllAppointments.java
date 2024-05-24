@@ -13,7 +13,6 @@ public class MainAllAppointments extends JDialog {
         initComponents();
         createHeader();
         createWork();
-        createAside();
         createFooter();
     }
     private void initComponents() {
@@ -31,8 +30,8 @@ public class MainAllAppointments extends JDialog {
         return new Dimension((int)width, (int)height);
     }
     private void createFooter() {
-    }
-    private void createAside() {
+        FooterAllAppointments footerAllAppointments = new FooterAllAppointments();
+        add(footerAllAppointments, BorderLayout.SOUTH);
     }
     private void createWork() {
         WorkAllAppointments workAllApointments = new WorkAllAppointments();
