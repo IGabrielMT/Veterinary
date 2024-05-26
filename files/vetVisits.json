@@ -1,0 +1,21 @@
+[
+  {
+    "petParent": {
+      "emailAdress": "maria.garcia@example.com",
+      "phoneNumber": 9876543210,
+      "name": "María",
+      "lastName": "García"
+    },
+    "pet": {
+      "name": "Luna",
+      "petType": "CAT"
+    },
+    "vaccineUsed": {
+      "name": "Trivalente",
+      "dueDate": "2028-08-31",
+      "petType": "CAT"
+    },
+    "day": "2024-06-15",
+    "numVaccinesUsed": 1
+  }
+]

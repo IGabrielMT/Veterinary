@@ -3,6 +3,9 @@
     <output-path>$PROJECT_DIR$/out/artifacts/ProyectoFinalProgramacion_jar</output-path>
     <root id="archive" name="ProyectoFinalProgramacion.jar">
       <element id="module-output" name="ProyectoFinalProgramacion" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/jcalendar-1.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/gson-2.11.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/lombok-1.18.32.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/libs/ManagerProperties.jar" path-in-jar="/" />
     </root>
   </artifact>
