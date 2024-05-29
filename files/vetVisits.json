@@ -1,0 +1,116 @@
+[
+  {
+    "petParent": {
+      "emailAdress": "ian.martinez",
+      "phoneNumber": 3124564536,
+      "name": "Ian",
+      "lastName": "Martinez"
+    },
+    "pet": {
+      "name": "Mono",
+      "petType": "CAT"
+    },
+    "vaccineUsed": {
+      "name": "Nobivac Tricat",
+      "dueTime": "P12M",
+      "petType": "CAT"
+    },
+    "day": "2024-05-28",
+    "numVaccinesUsed": 1
+  },
+  {
+    "petParent": {
+      "emailAdress": "julia.rodriguez",
+      "phoneNumber": 3157896543,
+      "name": "Julia",
+      "lastName": "Rodriguez"
+    },
+    "pet": {
+      "name": "Max",
+      "petType": "DOG"
+    },
+    "vaccineUsed": {
+      "name": "Nobivac DHPPi",
+      "dueTime": "P12M",
+      "petType": "DOG"
+    },
+    "day": "2024-06-10",
+    "numVaccinesUsed": 1
+  },
+  {
+    "petParent": {
+      "emailAdress": "carlos.sanchez",
+      "phoneNumber": 3104569874,
+      "name": "Carlos",
+      "lastName": "Sanchez"
+    },
+    "pet": {
+      "name": "Luna",
+      "petType": "CAT"
+    },
+    "vaccineUsed": {
+      "name": "Nobivac Leukogen",
+      "dueTime": "P12M",
+      "petType": "CAT"
+    },
+    "day": "2024-07-15",
+    "numVaccinesUsed": 1
+  },
+  {
+    "petParent": {
+      "emailAdress": "maria.gomez",
+      "phoneNumber": 3129876543,
+      "name": "Maria",
+      "lastName": "Gomez"
+    },
+    "pet": {
+      "name": "Bobby",
+      "petType": "DOG"
+    },
+    "vaccineUsed": {
+      "name": "Nobivac DHPPi",
+      "dueTime": "P12M",
+      "petType": "DOG"
+    },
+    "day": "2024-08-20",
+    "numVaccinesUsed": 1
+  },
+  {
+    "petParent": {
+      "emailAdress": "laura.martinez",
+      "phoneNumber": 3186543210,
+      "name": "Laura",
+      "lastName": "Martinez"
+    },
+    "pet": {
+      "name": "Mimi",
+      "petType": "CAT"
+    },
+    "vaccineUsed": {
+      "name": "Nobivac Tricat",
+      "dueTime": "P12M",
+      "petType": "CAT"
+    },
+    "day": "2024-09-05",
+    "numVaccinesUsed": 1
+  },
+  {
+    "petParent": {
+      "emailAdress": "expired.vaccine",
+      "phoneNumber": 3101234567,
+      "name": "Expired",
+      "lastName": "Vaccine"
+    },
+    "pet": {
+      "name": "Oldie",
+      "petType": "DOG"
+    },
+    "vaccineUsed": {
+      "name": "Nobivac DHPPi",
+      "dueTime": "P12M",
+      "petType": "DOG"
+    },
+    "day": "2023-04-01",
+    "numVaccinesUsed": 1
+  }
+]
