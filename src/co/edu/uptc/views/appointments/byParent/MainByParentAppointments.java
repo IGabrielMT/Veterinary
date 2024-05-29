@@ -1,5 +1,6 @@
 package co.edu.uptc.views.appointments.byParent;
 
+import co.edu.uptc.interfaces.VetInterface;
 import co.edu.uptc.views.mainpage.MainPageFrame;
 
 import javax.swing.*;
@@ -8,8 +9,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MainByParentAppointments extends JDialog {
-    public MainByParentAppointments(){
-        super(MainPageFrame.getInstance(), true);
+    private final MainPageFrame mainPageFrame;
+    private final VetInterface.Presenter presenterVet;
+
+    public MainByParentAppointments(MainPageFrame mainPageFrame, VetInterface.Presenter presenterVet){
+        super(mainPageFrame, true);
+        this.mainPageFrame = mainPageFrame;
+        this.presenterVet = presenterVet;
         initComponents();
         createHeader();
         createWork();
@@ -30,15 +36,15 @@ public class MainByParentAppointments extends JDialog {
         return new Dimension((int)width, (int)height);
     }
     private void createFooter() {
-        FooterByParentAppointments footerAllAppointments = new FooterByParentAppointments(this);
+        FooterByParentAppointments footerAllAppointments = new FooterByParentAppointments(this, mainPageFrame, presenterVet);
         add(footerAllAppointments, BorderLayout.SOUTH);
     }
     private void createWork() {
-        WorkByParentAppointments workAllApointments = new WorkByParentAppointments();
+        WorkByParentAppointments workAllApointments = new WorkByParentAppointments(presenterVet);
         add(workAllApointments, BorderLayout.CENTER);
     }
     private void createHeader() {
-        HeaderByParentAppointments headerAllAppointments = new HeaderByParentAppointments(this);
+        HeaderByParentAppointments headerAllAppointments = new HeaderByParentAppointments(this, mainPageFrame, presenterVet);
         add(headerAllAppointments, BorderLayout.NORTH);
     }
     private void fadeIn() {

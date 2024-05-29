@@ -1,21 +1,23 @@
 package co.edu.uptc.views.addVaccines;
 
-import co.edu.uptc.presenters.PresenterVet;
+import co.edu.uptc.interfaces.VetInterface;
 import co.edu.uptc.views.mainpage.MainPageFrame;
 import co.edu.uptc.views.wildCardClasses.CustomJComboBox;
-import com.toedter.calendar.JDateChooser;
-import lombok.Setter;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-@Setter
+
+
 public class MainAddVaccines extends JDialog {
-    PresenterVet presenterVet;
-    public MainAddVaccines() {
-        super(MainPageFrame.getInstance(), true);
-        presenterVet = new PresenterVet();
+    private final MainPageFrame mainPageFrame;
+    private final VetInterface.Presenter presenter;
+
+    public MainAddVaccines(MainPageFrame mainPageFrame, VetInterface.Presenter presenter) {
+        super(mainPageFrame, true);
+        this.mainPageFrame = mainPageFrame;
+        this.presenter = presenter;
         initComponents();
         createHeaderPanel();
         createWorkPanel();
@@ -35,13 +37,13 @@ public class MainAddVaccines extends JDialog {
         return new Dimension((int)width, (int)height);
     }
     private void createHeaderPanel(){
-        HeaderPanelAddVaccines headerPanel = new HeaderPanelAddVaccines(this);
+        HeaderPanelAddVaccines headerPanel = new HeaderPanelAddVaccines(this, mainPageFrame, presenter);
         this.add(headerPanel, BorderLayout.NORTH);
     }
     private void createWorkPanel(){
-        WorkPanelAddVaccines workPanel = new WorkPanelAddVaccines(this);
-        workPanel.setDueDate(new JDateChooser());
-        CustomJComboBox petType = new CustomJComboBox(presenterVet.obtainPetTypes());
+        WorkPanelAddVaccines workPanel = new WorkPanelAddVaccines(this, presenter);
+        workPanel.setDueTime(new CustomJComboBox(new String[]{"1 mes", "2 meses", "3 meses", "4 meses", "5 meses", "6 meses", "7 meses", "8 meses", "9 meses", "10 meses", "11 meses", "12 meses"}));
+        CustomJComboBox petType = new CustomJComboBox(presenter.obtainPetTypes());
         workPanel.setPetType(petType);
         workPanel.build();
         this.add(workPanel, BorderLayout.CENTER);
@@ -52,9 +54,9 @@ public class MainAddVaccines extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 opacity += 0.15f;
-                setOpacity(Math.min(opacity, 1)); // Set the new opacity
+                setOpacity(Math.min(opacity, 1));
                 if (opacity >= 1) {
-                    ((Timer)e.getSource()).stop(); // Stop the timer when the window is fully opaque
+                    ((Timer)e.getSource()).stop();
                 }
             }
         });

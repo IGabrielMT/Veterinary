@@ -1,7 +1,6 @@
 package co.edu.uptc.views.appointments.byDate;
 
 import co.edu.uptc.interfaces.VetInterface;
-import co.edu.uptc.presenters.PresenterVet;
 import co.edu.uptc.views.appointments.Table;
 import co.edu.uptc.views.wildCardClasses.Global;
 import com.toedter.calendar.JDateChooser;
@@ -11,12 +10,13 @@ import javax.swing.*;
 import java.awt.*;
 
 @Getter
-public class WorkByDateAppointments extends JPanel implements VetInterface.View.Tables {
+public class WorkByDateAppointments extends JPanel {
     private JDateChooser dateChooser;
-    private final PresenterVet presenterVet;
     private Table tableByDateAppointments;
-    public WorkByDateAppointments(){
-        presenterVet = new PresenterVet();
+    private final VetInterface.Presenter presenter;
+
+    public WorkByDateAppointments(VetInterface.Presenter presenter){
+        this.presenter = presenter;
         initWorkPanel();
     }
     private void initWorkPanel() {
@@ -76,10 +76,9 @@ public class WorkByDateAppointments extends JPanel implements VetInterface.View.
         return new Dimension((int)width, (int)height);
     }
 
-    @Override
     public void setData() {
-        presenterVet.getDataAndSetData();
-        Object[][] data = presenterVet.obtainVisitsByDate(dateChooser.getDate());
+        presenter.getDataAndSetData();
+        Object[][] data = presenter.obtainVisitsByDate(dateChooser.getDate());
         for (Object[] datum : data) {
             tableByDateAppointments.putData(datum);
         }

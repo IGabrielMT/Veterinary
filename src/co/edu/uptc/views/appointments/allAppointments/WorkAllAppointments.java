@@ -1,7 +1,6 @@
 package co.edu.uptc.views.appointments.allAppointments;
 
 import co.edu.uptc.interfaces.VetInterface;
-import co.edu.uptc.presenters.PresenterVet;
 import co.edu.uptc.views.appointments.Table;
 import co.edu.uptc.views.wildCardClasses.Global;
 import lombok.Getter;
@@ -10,11 +9,12 @@ import javax.swing.*;
 import java.awt.*;
 
 @Getter
-public class WorkAllAppointments extends JPanel implements VetInterface.View.Tables {
-    private final PresenterVet presenterVet;
+public class WorkAllAppointments extends JPanel  {
     private Table tableAllAppointments;
-    public WorkAllAppointments(){
-        presenterVet = new PresenterVet();
+    private final VetInterface.Presenter presenter;
+
+    public WorkAllAppointments(VetInterface.Presenter presenter){
+        this.presenter = presenter;
         initWorkPanel();
         setData();
     }
@@ -47,13 +47,10 @@ public class WorkAllAppointments extends JPanel implements VetInterface.View.Tab
         add(titlePanel, BorderLayout.NORTH);
         titlePanel.add(data);
     }
-    @Override
-    public void setData() {
-        presenterVet.getDataAndSetData();
-        Object[][] data = presenterVet.obtainVisits();
-        for (Object[] datum : data) {
+    private void setData(){
+        Object[][] visits = presenter.obtainVisits();
+        for (Object[] datum : visits) {
             tableAllAppointments.putData(datum);
         }
-
     }
 }

@@ -1,8 +1,10 @@
 package co.edu.uptc.views.appointments.byParent;
 
+import co.edu.uptc.interfaces.VetInterface;
 import co.edu.uptc.views.appointments.allAppointments.MainAllAppointments;
 import co.edu.uptc.views.appointments.byDate.MainByDateAppointments;
 import co.edu.uptc.views.appointments.byNextVaccines.MainByNextVaccineAppointments;
+import co.edu.uptc.views.mainpage.MainPageFrame;
 import co.edu.uptc.views.wildCardClasses.Global;
 import co.edu.uptc.views.wildCardClasses.LabelHeader;
 
@@ -12,9 +14,14 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class FooterByParentAppointments extends JPanel {
+    private final MainPageFrame mainPageFrame;
     private final JDialog parent;
-    public FooterByParentAppointments(JDialog parent) {
+    private final VetInterface.Presenter presenterVet;
+
+    public FooterByParentAppointments(JDialog parent, MainPageFrame mainPageFrame, VetInterface.Presenter presenterVet) {
         this.parent = parent;
+        this.mainPageFrame = mainPageFrame;
+        this.presenterVet = presenterVet;
         initPanel();
     }
     private void initPanel() {
@@ -85,15 +92,15 @@ public class FooterByParentAppointments extends JPanel {
         gridPanel.add(petsNext);
     }
     private void createAllAppointments(){
-        MainAllAppointments mainAllAppointments = new MainAllAppointments();
+        MainAllAppointments mainAllAppointments = new MainAllAppointments(mainPageFrame, presenterVet);
         mainAllAppointments.setVisible(true);
     }
     private void createByDateAppointments(){
-        MainByDateAppointments mainByDateAppointments = new MainByDateAppointments();
+        MainByDateAppointments mainByDateAppointments = new MainByDateAppointments(mainPageFrame, presenterVet);
         mainByDateAppointments.setVisible(true);
     }
     private void createByNextVaccineAppointments(){
-        MainByNextVaccineAppointments mainByNextVaccineAppointments = new MainByNextVaccineAppointments();
+        MainByNextVaccineAppointments mainByNextVaccineAppointments = new MainByNextVaccineAppointments(mainPageFrame, presenterVet);
         mainByNextVaccineAppointments.setVisible(true);
 
     }

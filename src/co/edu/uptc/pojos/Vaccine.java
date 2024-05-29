@@ -3,26 +3,26 @@ package co.edu.uptc.pojos;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.Period;
 
 @Setter
 @Getter
 public class Vaccine implements Comparable<Vaccine> {
     private String name;
-    private LocalDate dueDate;
+    private Period dueTime;
     private PetType petType;
 
     @Override
     public String toString() {
         return "Vaccine{" +
                 "name='" + name + '\'' +
-                ", dueDate=" + dueDate +
+                ", dueDate=" + dueTime +
                 ", petType=" + petType +
                 '}';
     }
 
     @Override
     public int compareTo(Vaccine o) {
-        return this.dueDate.compareTo(o.dueDate);
+        return Integer.compare(this.dueTime.getDays(), o.dueTime.getDays());
     }
 }

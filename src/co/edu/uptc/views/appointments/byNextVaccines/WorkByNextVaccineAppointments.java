@@ -1,7 +1,6 @@
 package co.edu.uptc.views.appointments.byNextVaccines;
 
 import co.edu.uptc.interfaces.VetInterface;
-import co.edu.uptc.presenters.PresenterVet;
 import co.edu.uptc.views.appointments.Table;
 import co.edu.uptc.views.wildCardClasses.CustomButton;
 import co.edu.uptc.views.wildCardClasses.Global;
@@ -11,12 +10,13 @@ import javax.swing.*;
 import java.awt.*;
 
 @Getter
-public class WorkByNextVaccineAppointments extends JPanel implements VetInterface.View.Tables {
-    private final PresenterVet presenterVet;
+public class WorkByNextVaccineAppointments extends JPanel {
+    private final VetInterface.Presenter presenter;
     private Table tableByDueDateVaccine;
     private CustomButton button;
-    public WorkByNextVaccineAppointments(){
-        presenterVet = new PresenterVet();
+
+    public WorkByNextVaccineAppointments(VetInterface.Presenter presenter){
+        this.presenter = presenter;
         initWorkPanel();
     }
     private void initWorkPanel() {
@@ -73,14 +73,13 @@ public class WorkByNextVaccineAppointments extends JPanel implements VetInterfac
         return new Dimension((int)width, (int)height);
     }
 
-    @Override
     public void setData() {
-        presenterVet.getDataAndSetData();
+        presenter.getDataAndSetData();
         Object[][] newData;
         if (button.getText().equals("↑↓")) {
-            newData = presenterVet.obtainVisitsByCloseDueDate();
+            newData = presenter.obtainVisitsByCloseDueDate();
         } else {
-            newData = presenterVet.obtainVisitsByLaterDueDate();
+            newData = presenter.obtainVisitsByLaterDueDate();
         }
         tableByDueDateVaccine.clearTable();
         for (Object[] datum : newData) {

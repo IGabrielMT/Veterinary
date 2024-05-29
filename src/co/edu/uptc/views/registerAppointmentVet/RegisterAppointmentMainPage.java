@@ -1,19 +1,23 @@
 package co.edu.uptc.views.registerAppointmentVet;
 
-import co.edu.uptc.presenters.PresenterVet;
+import co.edu.uptc.interfaces.VetInterface;
 import co.edu.uptc.views.mainpage.MainPageFrame;
 import co.edu.uptc.views.wildCardClasses.CustomJComboBox;
+import lombok.Setter;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+@Setter
 public class RegisterAppointmentMainPage extends JDialog {
-    PresenterVet presenterVet;
-    public RegisterAppointmentMainPage(){
-        super(MainPageFrame.getInstance(), true);
-        presenterVet = new PresenterVet();
+    private VetInterface.Presenter presenterVet;
+    private MainPageFrame mainPageFrame;
+
+    public RegisterAppointmentMainPage(MainPageFrame mainPageFrame, VetInterface.Presenter presenterVet){
+        super(mainPageFrame, true);
+        this.mainPageFrame = mainPageFrame;
+        this.presenterVet = presenterVet;
         initComponents();
         createHeaderPanel();
         createWorkPanel();
@@ -35,14 +39,18 @@ public class RegisterAppointmentMainPage extends JDialog {
         return new Dimension((int)width, (int)height);
     }
     private void createHeaderPanel(){
-        HeaderPanelAppointment headerPanel = new HeaderPanelAppointment(this);
+        HeaderPanelAppointment headerPanel = new HeaderPanelAppointment(this, mainPageFrame, presenterVet);
         this.add(headerPanel, BorderLayout.NORTH);
     }
     private void createWorkPanel(){
-        WorkPanelAppointmentVet workPanelAppointmentVet = new WorkPanelAppointmentVet(this);
+        WorkPanelAppointmentVet workPanelAppointmentVet = new WorkPanelAppointmentVet(this, presenterVet);
         workPanelAppointmentVet.setPetType(new CustomJComboBox(presenterVet.obtainPetTypes()));
         workPanelAppointmentVet.setVaccinesNum(new CustomJComboBox(new String[]{"1", "2", "3", "4"}));
-        workPanelAppointmentVet.setVaccines(new CustomJComboBox(presenterVet.obtainVaccinesName()));
+        if (presenterVet.obtainVaccinesName().length == 0){
+            JOptionPane.showMessageDialog(null,"No hay vacunas, cree una", "Error", JOptionPane.ERROR_MESSAGE);
+        }else
+            workPanelAppointmentVet.setVaccines(new CustomJComboBox(presenterVet.obtainVaccinesName()));
+
         workPanelAppointmentVet.buildPanel();
         add(workPanelAppointmentVet, BorderLayout.CENTER);
     }
@@ -52,9 +60,9 @@ public class RegisterAppointmentMainPage extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 opacity += 0.15f;
-                setOpacity(Math.min(opacity, 1)); // Set the new opacity
+                setOpacity(Math.min(opacity, 1));
                 if (opacity >= 1) {
-                    ((Timer)e.getSource()).stop(); // Stop the timer when the window is fully opaque
+                    ((Timer)e.getSource()).stop();
                 }
             }
         });

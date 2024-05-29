@@ -1,21 +1,31 @@
 package co.edu.uptc.presenters;
 
 import co.edu.uptc.interfaces.VetInterface;
-import co.edu.uptc.models.Vet;
 import co.edu.uptc.models.assets.JSONManager;
 import co.edu.uptc.pojos.*;
-import co.edu.uptc.views.ThrowMessage;
+import co.edu.uptc.text.ManagerProperties;
 
-import javax.swing.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class PresenterVet implements VetInterface.Presenter {
-    private final Vet vet;
+    private VetInterface.Model model;
+    private final ManagerProperties managerProperties;
+    private VetInterface.View view;
 
-    public PresenterVet() {
-        vet = new Vet();
+    public PresenterVet() throws IOException {
+        managerProperties = new ManagerProperties();
+        managerProperties.setFileName("files/vet.properties");
+        managerProperties.load();
+    }
+
+    @Override
+    public void start(){
         getDataAndSetData();
     }
 
@@ -23,16 +33,16 @@ public class PresenterVet implements VetInterface.Presenter {
     public void addVaccine(String[] vaccine) {
         Vaccine vaccine1 = new Vaccine();
         vaccine1.setName(vaccine[0]);
-        vaccine1.setDueDate(LocalDate.parse(vaccine[1]));
+        vaccine1.setDueTime(Period.parse(vaccine[1]));
         vaccine1.setPetType(PetType.fromDisplayName(vaccine[2]));
-        vet.addVaccine(vaccine1);
+        model.addVaccine(vaccine1);
         saveData();
     }
 
     @Override
     public void addVisit(String[] visit) {
         VetVisit vetVisit = createVetVisit(visit);
-        vet.addVisit(vetVisit);
+        model.addVisit(vetVisit);
         saveData();
     }
 
@@ -42,16 +52,10 @@ public class PresenterVet implements VetInterface.Presenter {
         PetParent petParent = createPetParent(visit);
         Vaccine vaccine = obtainVaccineByName(visit[4]);
         if (!pet.getPetType().equals(vaccine.getPetType())) {
-            ThrowMessage.throwMessageDialog(
-                    "El tipo de vacuna debe ser el mismo que el tipo de mascota\n" +
-                            "Tipo de vacuna: " + vaccine.getPetType().getDisplayName() +
-                            "\nTipo de mascota: " + pet.getPetType().getDisplayName(),
-                    "Error", JOptionPane.ERROR_MESSAGE
-            );
-            throw new IllegalArgumentException("El tipo de vacuna debe ser el mismo que el tipo de mascota");
+            throw new IllegalArgumentException();
         }
         vetVisit.setNumVaccinesUsed(Integer.parseInt(visit[1]));
-        vetVisit.setDay(parseVisitDate(visit[5], vaccine));
+        vetVisit.setDay(parseVisitDate(visit[5]));
         vetVisit.setPet(pet);
         vetVisit.setPetParent(petParent);
         vetVisit.setVaccineUsed(vaccine);
@@ -74,26 +78,14 @@ public class PresenterVet implements VetInterface.Presenter {
         return petParent;
     }
 
-    private LocalDate parseVisitDate(String visitDateStr, Vaccine vaccine) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
-        LocalDate visitDate = LocalDate.parse(visitDateStr, formatter);
-        if (visitDate.isAfter(vaccine.getDueDate())) {
-            ThrowMessage.throwMessageDialog(
-                    "La fecha de la visita no puede ser después de la fecha de vencimiento de la vacuna\n"
-                            + "Fecha de la cita: " + visitDate +
-                            "\nFecha de vencimiento de la vacuna: " +
-                            vaccine.getDueDate().toString(), "Error", JOptionPane.ERROR_MESSAGE
-            );
-            throw new IllegalArgumentException(
-                    "La fecha de la visita no puede ser después de la fecha de vencimiento de la vacuna"
-            );
-        }
-        return visitDate;
+    private LocalDate parseVisitDate(String visitDateStr) throws IllegalArgumentException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(managerProperties.getValue("pattern") ,Locale.ENGLISH);
+        return LocalDate.parse(visitDateStr, formatter);
     }
 
     @Override
     public String[] obtainVaccinesName(){
-        TreeSet<Vaccine> vaccines = vet.getVaccines();
+        TreeSet<Vaccine> vaccines = model.getVaccines();
         String[] vaccinesArray = new String[vaccines.size()];
         int i = 0;
         for (Vaccine vaccine : vaccines) {
@@ -105,7 +97,7 @@ public class PresenterVet implements VetInterface.Presenter {
 
     @Override
     public Vaccine obtainVaccineByName(String vaccineName){
-        TreeSet<Vaccine> vaccines = vet.getVaccines();
+        TreeSet<Vaccine> vaccines = model.getVaccines();
         for (Vaccine vaccine : vaccines) {
             if (vaccine.getName().equals(vaccineName)) {
                 return vaccine;
@@ -116,34 +108,34 @@ public class PresenterVet implements VetInterface.Presenter {
 
     @Override
     public Object[][] obtainVisits() {
-        return transformToMatrix(vet.getVisits());
+        return transformToMatrix(model.getVisits());
     }
 
     @Override
     public Object[][] obtainVisitsByCloseDueDate() {
-        return transformToMatrix(vet.obtainVisitByCloseDueDate());
+        return transformToMatrix(model.obtainVisitByCloseDueDate());
     }
 
     @Override
     public Object[][] obtainVisitsByPetParentPhoneNumber(Long phoneNumber) {
-        return transformToMatrix(vet.obtainVisitByPetParentPhoneNumber(phoneNumber));
+        return transformToMatrix(model.obtainVisitByPetParentPhoneNumber(phoneNumber));
     }
 
     @Override
     public Object[][] obtainVisitsByDate(Date date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
-        return transformToMatrix(vet.obtainVisitByDate(LocalDate.parse(date.toString(), formatter)));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(managerProperties.getValue("pattern"), Locale.ENGLISH);
+        return transformToMatrix(model.obtainVisitByDate(LocalDate.parse(date.toString(), formatter)));
     }
 
     @Override
     public Object[][] obtainVisitsByLaterDueDate(){
-        return transformToMatrix(vet.obtainVisitByLaterDueDate());
+        return transformToMatrix(model.obtainVisitByLaterDueDate());
     }
 
     @Override
     public void saveData() {
-        JSONManager.createJSONFileByCollection("files/vetVisits.json", vet.getVisits());
-        JSONManager.createJSONFileByCollection("files/vaccines.json", vet.getVaccines());
+        JSONManager.createJSONFileByCollection(managerProperties.getValue("pathVetVisits"), model.getVisits());
+        JSONManager.createJSONFileByCollection(managerProperties.getValue("pathVaccines"), model.getVaccines());
     }
 
     @Override
@@ -153,12 +145,30 @@ public class PresenterVet implements VetInterface.Presenter {
 
     @Override
     public void getDataAndSetData() {
-        Collection<?> collection = JSONManager.createCollectionByJSONFile("files/vetVisits.json", VetVisit.class);
-        assert collection != null;
-        vet.setVisits(new ArrayList<>(List.of(Arrays.copyOf(collection.toArray(), collection.size(), VetVisit[].class))));
-        Collection<?> collectionVaccines = JSONManager.createCollectionByJSONFile("files/vaccines.json", Vaccine.class);
-        assert collectionVaccines != null;
-        vet.setVaccines(new TreeSet<>(List.of(Arrays.copyOf(collectionVaccines.toArray(), collectionVaccines.size(), Vaccine[].class))));
+        if (!Files.exists(Paths.get(managerProperties.getValue("pathVetVisits"))) && !Files.exists(Paths.get(managerProperties.getValue("pathVaccines")))){
+            JSONManager.createJSONFileByCollection(managerProperties.getValue("pathVetVisits"),new ArrayList<>() );
+            JSONManager.createJSONFileByCollection(managerProperties.getValue("pathVaccines"), new TreeSet<>());
+        }
+        Collection<?> collection = JSONManager.createCollectionByJSONFile(managerProperties.getValue("pathVetVisits"), VetVisit.class);
+        Collection<?> collectionVaccines = JSONManager.createCollectionByJSONFile(managerProperties.getValue("pathVaccines"), Vaccine.class);
+        if (collectionVaccines == null || collection == null) {
+            model.setVisits(new ArrayList<>());
+            model.setVaccines(new TreeSet<>());
+        }
+        else{
+            model.setVisits(new ArrayList<>(List.of(Arrays.copyOf(collection.toArray(), collection.size(), VetVisit[].class))));
+            model.setVaccines(new TreeSet<>(List.of(Arrays.copyOf(collectionVaccines.toArray(), collectionVaccines.size(), Vaccine[].class))));
+        }
+    }
+
+    @Override
+    public void setModel(VetInterface.Model model) {
+        this.model = model;
+    }
+
+    @Override
+    public void setView(VetInterface.View view) {
+        this.view = view;
     }
 
     private Object[][] transformToMatrix(ArrayList<VetVisit> visits) {
@@ -178,17 +188,23 @@ public class PresenterVet implements VetInterface.Presenter {
         row[4] = visit.getPet().getName();
         row[5] = visit.getPet().getPetType().getDisplayName();
         row[6] = visit.getNumVaccinesUsed();
-        row[7] = getVaccineName(visit);
+        row[7] = visit.getVaccineUsed().getName();
         row[8] = visit.getDay();
         row[9] = getVaccineDueDate(visit);
         return row;
     }
 
-    private String getVaccineName(VetVisit visit) {
-        return visit.getVaccineUsed() != null ? visit.getVaccineUsed().getName() : "No vaccine";
-    }
+    private String getVaccineDueDate(VetVisit visit) {
+        LocalDate visitDate = visit.getDay();
+        Period vaccineValidity = visit.getVaccineUsed().getDueTime();
+        LocalDate vaccineExpiryDate = visitDate.plus(vaccineValidity);
+        Period difference = Period.between(LocalDate.now(), vaccineExpiryDate);
 
-    private Object getVaccineDueDate(VetVisit visit) {
-        return visit.getVaccineUsed() != null ? visit.getVaccineUsed().getDueDate() : "No vaccine";
+        if (!difference.isNegative()) {
+            return "Faltan " + difference.getMonths() + " meses y " + difference.getDays() + " días";
+        } else {
+            difference = difference.negated();
+            return "La vacuna expiró hace " + difference.getMonths() + " meses y " + difference.getDays() + " días";
+        }
     }
 }

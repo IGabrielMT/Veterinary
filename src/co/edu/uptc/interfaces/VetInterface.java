@@ -18,17 +18,20 @@ public interface VetInterface {
         ArrayList<VetVisit> obtainVisitByDate(LocalDate date);
         ArrayList<VetVisit> getVisits();
         TreeSet<Vaccine> getVaccines();
+        void setPresenter(Presenter presenter);
+        void setVisits(ArrayList<VetVisit> visits);
+        void setVaccines(TreeSet<Vaccine> vaccines);
     }
 
     interface View {
-        interface Tables{
-            void setData();
-        }
-        String[] returnData();
+        void start();
+
+        void setPresenter(Presenter presenter);
     }
 
 
     interface Presenter {
+        void start();
         void addVaccine(String[] vaccine);
         void addVisit(String[] visit);
         String[] obtainVaccinesName();
@@ -41,5 +44,7 @@ public interface VetInterface {
         void saveData();
         String[] obtainPetTypes();
         void getDataAndSetData();
+        void setModel(Model model);
+        void setView(View view);
     }
 }

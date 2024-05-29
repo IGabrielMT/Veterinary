@@ -1,7 +1,6 @@
 package co.edu.uptc.views.registerAppointmentVet;
 
 import co.edu.uptc.interfaces.VetInterface;
-import co.edu.uptc.presenters.PresenterVet;
 import co.edu.uptc.views.wildCardClasses.NumericTextField;
 import co.edu.uptc.views.wildCardClasses.CustomButton;
 import co.edu.uptc.views.wildCardClasses.CustomJComboBox;
@@ -17,8 +16,8 @@ import java.util.Objects;
 
 @Getter
 @Setter
-public class WorkPanelAppointmentVet extends JPanel implements VetInterface.View{
-    private PresenterVet presenterVet;
+public class WorkPanelAppointmentVet extends JPanel {
+    private VetInterface.Presenter presenterVet;
     private CustomJComboBox petType;
     private CustomJComboBox vaccinesNum;
     private CustomJComboBox vaccines;
@@ -29,12 +28,11 @@ public class WorkPanelAppointmentVet extends JPanel implements VetInterface.View
     private LimitedTextField email;
     private LimitedTextField ownerLastName;
     private JDialog parent;
-    public WorkPanelAppointmentVet(JDialog parent){
+    public WorkPanelAppointmentVet(JDialog parent, VetInterface.Presenter presenterVet){
         this.parent = parent;
-        presenterVet = new PresenterVet();
+        this.presenterVet = presenterVet;
     }
     public void buildPanel() {
-
         initWorkPanel();
         createLabelAndText();
         requestFocusInWindow();
@@ -133,7 +131,6 @@ public class WorkPanelAppointmentVet extends JPanel implements VetInterface.View
         return button;
     }
 
-    @Override
     public String[] returnData() {
         return new String[]{
                 petName.getText(),

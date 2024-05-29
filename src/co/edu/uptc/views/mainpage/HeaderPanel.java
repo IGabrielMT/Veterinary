@@ -1,5 +1,6 @@
 package co.edu.uptc.views.mainpage;
 
+import co.edu.uptc.interfaces.VetInterface;
 import co.edu.uptc.views.addVaccines.MainAddVaccines;
 import co.edu.uptc.views.appointments.allAppointments.MainAllAppointments;
 import co.edu.uptc.views.wildCardClasses.CustomButton;
@@ -14,7 +15,12 @@ import java.awt.event.MouseEvent;
 public class HeaderPanel extends JPanel{
     private JPanel headerLabelsPanel;
     private JPanel titlePanel;
-    public HeaderPanel(){
+    private final MainPageFrame mainPageFrame;
+    private final VetInterface.Presenter presenter;
+
+    public HeaderPanel(MainPageFrame mainPageFrame, VetInterface.Presenter presenter) {
+        this.mainPageFrame = mainPageFrame;
+        this.presenter = presenter;
         initComponents();
         createPanelHeaderLabels();
         createLabelAddVaccines();
@@ -79,11 +85,11 @@ public class HeaderPanel extends JPanel{
         headerLabelsPanel.add(button);
     }
     private void addVaccine(){
-        MainAddVaccines mainAddVaccines = new MainAddVaccines();
+        MainAddVaccines mainAddVaccines = new MainAddVaccines(mainPageFrame, presenter);
         mainAddVaccines.setVisible(true);
     }
     private void addAppointments(){
-        MainAllAppointments mainAllAppointments = new MainAllAppointments();
+        MainAllAppointments mainAllAppointments = new MainAllAppointments(mainPageFrame, presenter);
         mainAllAppointments.setVisible(true);
     }
 

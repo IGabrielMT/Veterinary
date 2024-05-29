@@ -1,5 +1,6 @@
 package co.edu.uptc.views.appointments.byDate;
 
+import co.edu.uptc.interfaces.VetInterface;
 import co.edu.uptc.views.mainpage.MainPageFrame;
 
 import javax.swing.*;
@@ -8,8 +9,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MainByDateAppointments extends JDialog {
-    public MainByDateAppointments(){
-        super(MainPageFrame.getInstance(), true);
+    private final MainPageFrame mainPageFrame;
+    private final VetInterface.Presenter presenter;
+    public MainByDateAppointments(MainPageFrame mainPageFrame, VetInterface.Presenter presenter){
+        super(mainPageFrame, true);
+        this.mainPageFrame = mainPageFrame;
+        this.presenter = presenter;
         initComponents();
         createHeader();
         createWork();
@@ -30,15 +35,15 @@ public class MainByDateAppointments extends JDialog {
         return new Dimension((int)width, (int)height);
     }
     private void createFooter() {
-        FooterByDateAppointments footerAllAppointments = new FooterByDateAppointments(this);
+        FooterByDateAppointments footerAllAppointments = new FooterByDateAppointments(this, mainPageFrame, presenter);
         add(footerAllAppointments, BorderLayout.SOUTH);
     }
     private void createWork() {
-        WorkByDateAppointments workAllApointments = new WorkByDateAppointments();
+        WorkByDateAppointments workAllApointments = new WorkByDateAppointments(presenter);
         add(workAllApointments, BorderLayout.CENTER);
     }
     private void createHeader() {
-        HeaderByDateAppointments headerAllAppointments = new HeaderByDateAppointments(this);
+        HeaderByDateAppointments headerAllAppointments = new HeaderByDateAppointments(this, mainPageFrame, presenter);
         add(headerAllAppointments, BorderLayout.NORTH);
     }
     private void fadeIn() {

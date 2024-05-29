@@ -1,7 +1,6 @@
 package co.edu.uptc.views.appointments.byParent;
 
 import co.edu.uptc.interfaces.VetInterface;
-import co.edu.uptc.presenters.PresenterVet;
 import co.edu.uptc.views.appointments.Table;
 import co.edu.uptc.views.wildCardClasses.Global;
 import co.edu.uptc.views.wildCardClasses.NumericTextField;
@@ -11,12 +10,13 @@ import javax.swing.*;
 import java.awt.*;
 
 @Getter
-public class WorkByParentAppointments extends JPanel implements VetInterface.View.Tables {
-    private final PresenterVet presenterVet;
+public class WorkByParentAppointments extends JPanel {
+    private final VetInterface.Presenter presenterVet;
     private Table tableByPhoneNumber;
     private NumericTextField numericTextField;
-    public WorkByParentAppointments(){
-        presenterVet = new PresenterVet();
+
+    public WorkByParentAppointments(VetInterface.Presenter presenterVet){
+        this.presenterVet = presenterVet;
         initWorkPanel();
     }
     private void initWorkPanel() {
@@ -65,7 +65,6 @@ public class WorkByParentAppointments extends JPanel implements VetInterface.Vie
         return new Dimension((int)width, (int)height);
     }
 
-    @Override
     public void setData() {
         for (Object[] object: presenterVet.obtainVisitsByPetParentPhoneNumber(Long.parseLong(numericTextField.getText()))){
             tableByPhoneNumber.putData(object);

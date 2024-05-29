@@ -1,34 +1,30 @@
 package co.edu.uptc.views.addVaccines;
 
 import co.edu.uptc.interfaces.VetInterface;
-import co.edu.uptc.presenters.PresenterVet;
 import co.edu.uptc.views.wildCardClasses.CustomButton;
 import co.edu.uptc.views.wildCardClasses.CustomJComboBox;
 import co.edu.uptc.views.wildCardClasses.Global;
 import co.edu.uptc.views.wildCardClasses.LimitedTextField;
-import com.toedter.calendar.JDateChooser;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.SneakyThrows;
 
 import javax.swing.*;
 import java.awt.*;
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.Period;
 import java.util.Objects;
 
 @Getter
 @Setter
-public class WorkPanelAddVaccines extends JPanel implements VetInterface.View{
-    private PresenterVet presenterVet;
+public class WorkPanelAddVaccines extends JPanel{
+    private VetInterface.Presenter presenterVet;
     private LimitedTextField nameVaccine;
-    private JDateChooser dueDate;
+    private CustomJComboBox dueTime;
     private CustomJComboBox petType;
     private JDialog parent;
 
-    public WorkPanelAddVaccines(JDialog parent){
+    public WorkPanelAddVaccines(JDialog parent, VetInterface.Presenter presenterVet){
         this.parent = parent;
-        presenterVet = new PresenterVet();
+        this.presenterVet = presenterVet;
         initWorkPanel();
     }
 
@@ -82,7 +78,7 @@ public class WorkPanelAddVaccines extends JPanel implements VetInterface.View{
         JLabel label = new JLabel("Nombre de la vacuna:");
         label.setFont(Global.FONT_TEXTS);
         gridPanel.add(label);
-        label = new JLabel("Fecha de vencimiento: (dd/mm/yyyy)");
+        label = new JLabel("Fecha de vencimiento:");
         label.setFont(Global.FONT_TEXTS);
         gridPanel.add(label);
         label = new JLabel("Tipo de mascota:");
@@ -90,26 +86,22 @@ public class WorkPanelAddVaccines extends JPanel implements VetInterface.View{
         gridPanel.add(label);
         nameVaccine = new LimitedTextField(20, "");
         gridPanel.add(nameVaccine);
-        gridPanel.add(dueDate);
+        gridPanel.add(dueTime);
         gridPanel.add(petType);
     }
 
-@SneakyThrows
-@Override
-public String[] returnData() {
-    String[] data = new String[3];
-    data[0] = nameVaccine.getText();
-    LocalDate dueDateLocal = dueDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-    LocalDate oneYearLater = LocalDate.now().plusYears(1);
-    if (dueDateLocal.isAfter(oneYearLater)) {
-        System.out.println(dueDateLocal);
-        data[1] = dueDateLocal.toString();
-    } else {
-        JOptionPane.showMessageDialog(null, "La fecha de vencimiento no puede ser menor a la fecha actual");
-        throw new Exception("La fecha de vencimiento no puede ser menor a la fecha actual más un año");
+    public String[] returnData() {
+        String[] data = new String[3];
+        data[0] = nameVaccine.getText();
+        Period period = getPeriodFromSelection(Objects.requireNonNull(dueTime.getSelectedItem()).toString());
+        data[1] = period.toString();
+        data[2] = Objects.requireNonNull(petType.getSelectedItem()).toString();
+        return data;
     }
 
-    data[2] = Objects.requireNonNull(petType.getSelectedItem()).toString();
-    return data;
+    public Period getPeriodFromSelection(String selection) {
+        String number = selection.split(" ")[0];
+        int months = Integer.parseInt(number);
+        return Period.ofMonths(months);
     }
 }

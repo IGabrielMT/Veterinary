@@ -1,22 +1,29 @@
 package co.edu.uptc.views.mainpage;
 
+import co.edu.uptc.interfaces.VetInterface;
+
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
 
-public class MainPageFrame extends JFrame {
-    private static MainPageFrame instance;
+public class MainPageFrame extends JFrame implements VetInterface.View {
+    private VetInterface.Presenter presenter;
 
     public MainPageFrame(){
+    }
+
+    @Override
+    public void start() {
         initComponents();
         createHeaderPanel();
         createWorkPanel();
+        setVisible(true);
     }
+
     private void initComponents(){
         this.setTitle("Veterinaria");
         this.setUndecorated(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setVisible(true);
         this.setLayout(new BorderLayout());
         this.setSize(getMainSize());
         this.setLocationRelativeTo(null);
@@ -29,11 +36,11 @@ public class MainPageFrame extends JFrame {
         return new Dimension((int)width, (int)height);
     }
     private void createWorkPanel(){
-        JPanel workPanel = new WorkPanel();
+        JPanel workPanel = new WorkPanel(this, presenter);
         this.add(workPanel, BorderLayout.CENTER);
     }
     private void createHeaderPanel(){
-        JPanel headerPanel = new HeaderPanel();
+        JPanel headerPanel = new HeaderPanel(this, presenter);
         this.add(headerPanel, BorderLayout.NORTH);
     }
     private void setAppIcon(){
@@ -42,11 +49,9 @@ public class MainPageFrame extends JFrame {
         ImageIcon icon = new ImageIcon(iconURL);
         this.setIconImage(icon.getImage());
     }
-    public static MainPageFrame getInstance() {
-        if (instance == null) {
-            instance = new MainPageFrame();
-        }
-        return instance;
-    }
 
+    @Override
+    public void setPresenter(VetInterface.Presenter presenter) {
+        this.presenter = presenter;
+    }
 }

@@ -1,6 +1,8 @@
 package co.edu.uptc.views.appointments.byParent;
 
+import co.edu.uptc.interfaces.VetInterface;
 import co.edu.uptc.views.addVaccines.MainAddVaccines;
+import co.edu.uptc.views.mainpage.MainPageFrame;
 import co.edu.uptc.views.registerAppointmentVet.RegisterAppointmentMainPage;
 import co.edu.uptc.views.wildCardClasses.CustomButton;
 import co.edu.uptc.views.wildCardClasses.Global;
@@ -15,9 +17,13 @@ public class HeaderByParentAppointments extends JPanel {
     private JPanel headerLabelsPanel;
     private JPanel titlePanel;
     private final JDialog parent;
+    private final MainPageFrame mainPageFrame;
+    private final VetInterface.Presenter presenterVet;
 
-    public HeaderByParentAppointments(JDialog parent){
+    public HeaderByParentAppointments(JDialog parent, MainPageFrame mainPageFrame, VetInterface.Presenter presenterVet){
         this.parent = parent;
+        this.mainPageFrame = mainPageFrame;
+        this.presenterVet = presenterVet;
         initComponents();
         createPanelHeaderLabels();
         createLabelAddVaccines();
@@ -85,11 +91,11 @@ public class HeaderByParentAppointments extends JPanel {
         headerLabelsPanel.add(button);
     }
     private void createVaccines(){
-        MainAddVaccines mainAddVaccines = new MainAddVaccines();
+        MainAddVaccines mainAddVaccines = new MainAddVaccines(mainPageFrame, presenterVet);
         mainAddVaccines.setVisible(true);
     }
     private void createRegister(){
-        RegisterAppointmentMainPage registerAppointmentMainPage = new RegisterAppointmentMainPage();
+        RegisterAppointmentMainPage registerAppointmentMainPage = new RegisterAppointmentMainPage(mainPageFrame, presenterVet);
         registerAppointmentMainPage.setVisible(true);
     }
 

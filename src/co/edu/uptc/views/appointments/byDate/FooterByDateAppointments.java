@@ -1,8 +1,10 @@
 package co.edu.uptc.views.appointments.byDate;
 
+import co.edu.uptc.interfaces.VetInterface;
 import co.edu.uptc.views.appointments.allAppointments.MainAllAppointments;
 import co.edu.uptc.views.appointments.byNextVaccines.MainByNextVaccineAppointments;
 import co.edu.uptc.views.appointments.byParent.MainByParentAppointments;
+import co.edu.uptc.views.mainpage.MainPageFrame;
 import co.edu.uptc.views.wildCardClasses.Global;
 import co.edu.uptc.views.wildCardClasses.LabelHeader;
 
@@ -13,8 +15,13 @@ import java.awt.event.MouseEvent;
 
 public class FooterByDateAppointments extends JPanel {
     private final JDialog parent;
-    public FooterByDateAppointments(JDialog parent) {
+    private final MainPageFrame mainPageFrame;
+    private final VetInterface.Presenter presenter;
+
+    public FooterByDateAppointments(JDialog parent, MainPageFrame mainPageFrame, VetInterface.Presenter presenter) {
+        this.mainPageFrame = mainPageFrame;
         this.parent = parent;
+        this.presenter = presenter;
         initPanel();
     }
     private void initPanel() {
@@ -85,15 +92,16 @@ public class FooterByDateAppointments extends JPanel {
         gridPanel.add(responsible);
     }
     private void createAllAppointments(){
-        MainAllAppointments mainAllAppointments = new MainAllAppointments();
+        MainAllAppointments mainAllAppointments = new MainAllAppointments(mainPageFrame, presenter);
         mainAllAppointments.setVisible(true);
     }
     private void createNextVaccineAppointments(){
-        MainByNextVaccineAppointments mainByNextVaccineAppointments = new MainByNextVaccineAppointments();
+        MainByNextVaccineAppointments mainByNextVaccineAppointments = new MainByNextVaccineAppointments(mainPageFrame, presenter);
         mainByNextVaccineAppointments.setVisible(true);
     }
     private void createByParentAppointments(){
-        MainByParentAppointments mainByParentAppointments = new MainByParentAppointments();
+        MainByParentAppointments mainByParentAppointments = new MainByParentAppointments(mainPageFrame, presenter);
         mainByParentAppointments.setVisible(true);
     }
+
 }
