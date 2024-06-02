@@ -39,26 +39,26 @@ public class VetModel implements VetInterface.Model {
 
 @Override
 public ArrayList<VetVisit> obtainVisitByCloseDueDate() {
-    ArrayList<VetVisit> copyVisitsOrdered = new ArrayList<>(List.of(Arrays.copyOf(visits.toArray(), visits.size(), VetVisit[].class)));
+    ArrayList<VetVisit> copyVisitsOrdered = new ArrayList<>(visits);
     copyVisitsOrdered.sort(Comparator.comparing(v -> {
-        long daysSinceVisit = ChronoUnit.DAYS.between(v.getDay(), LocalDate.now());
-        long vaccineDueTime = v.getVaccineUsed().getDueTime().get(ChronoUnit.DAYS);
+        long daysSinceVisit = ChronoUnit.DAYS.between(v.getDay(), LocalDate.now()) + ChronoUnit.YEARS.between(v.getDay(), LocalDate.now()) * 365;
+        long vaccineDueTime = v.getVaccineUsed().getDueTime().get(ChronoUnit.DAYS) + v.getVaccineUsed().getDueTime().get(ChronoUnit.YEARS) * 365;
         return Math.abs(daysSinceVisit - vaccineDueTime);
     }));
     return copyVisitsOrdered;
 }
 
-@Override
-public ArrayList<VetVisit> obtainVisitByLaterDueDate() {
-    ArrayList<VetVisit> copyVisitsOrdered = new ArrayList<>(visits);
-    copyVisitsOrdered.sort(Comparator.comparing(v -> {
-        long daysSinceVisit = ChronoUnit.DAYS.between(v.getDay(), LocalDate.now());
-        long vaccineDueTime = v.getVaccineUsed().getDueTime().get(ChronoUnit.DAYS);
-        return Math.abs(daysSinceVisit - vaccineDueTime);
-    }));
-    Collections.reverse(copyVisitsOrdered);
-    return copyVisitsOrdered;
-}
+    @Override
+    public ArrayList<VetVisit> obtainVisitByLaterDueDate() {
+        ArrayList<VetVisit> copyVisitsOrdered = new ArrayList<>(visits);
+        copyVisitsOrdered.sort(Comparator.comparing(v -> {
+            long daysSinceVisit = ChronoUnit.DAYS.between(v.getDay(), LocalDate.now()) + ChronoUnit.YEARS.between(v.getDay(), LocalDate.now()) * 365;
+            long vaccineDueTime = v.getVaccineUsed().getDueTime().get(ChronoUnit.DAYS) + v.getVaccineUsed().getDueTime().get(ChronoUnit.YEARS) * 365;
+            return Math.abs(daysSinceVisit - vaccineDueTime);
+        }));
+        Collections.reverse(copyVisitsOrdered);
+        return copyVisitsOrdered;
+    }
     @Override
     public ArrayList<VetVisit> obtainVisitByPetParentPhoneNumber(Long phoneNumber) {
         ArrayList<VetVisit> visitsByPhoneNumber = new ArrayList<>();
@@ -79,6 +79,28 @@ public ArrayList<VetVisit> obtainVisitByLaterDueDate() {
             }
         }
         return visitsByDate;
+    }
+
+    @Override
+    public ArrayList<VetVisit> obtainVisitsUpSpecifiedWeight(int weight) {
+        ArrayList<VetVisit> visitsUpSpecifiedWeight = new ArrayList<>();
+        for (VetVisit visit : visits) {
+            if (visit.getPet().getWeight() >= weight) {
+                visitsUpSpecifiedWeight.add(visit);
+            }
+        }
+        return visitsUpSpecifiedWeight;
+    }
+
+    @Override
+    public ArrayList<VetVisit> obtainVisitsDownSpecifiedWeight(int weight) {
+        ArrayList<VetVisit> visitsDownSpecifiedWeight = new ArrayList<>();
+        for (VetVisit visit : visits) {
+            if (visit.getPet().getWeight() < weight) {
+                visitsDownSpecifiedWeight.add(visit);
+            }
+        }
+        return visitsDownSpecifiedWeight;
     }
 
     @Override

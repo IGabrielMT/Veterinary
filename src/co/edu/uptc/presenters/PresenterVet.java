@@ -25,7 +25,7 @@ public class PresenterVet implements VetInterface.Presenter {
     }
 
     @Override
-    public void start(){
+    public void start() {
         getDataAndSetData();
     }
 
@@ -35,8 +35,10 @@ public class PresenterVet implements VetInterface.Presenter {
         vaccine1.setName(vaccine[0]);
         vaccine1.setDueTime(Period.parse(vaccine[1]));
         vaccine1.setPetType(PetType.fromDisplayName(vaccine[2]));
+        System.out.println(vaccine1);
         model.addVaccine(vaccine1);
         saveData();
+        model.getVaccines().forEach(System.out::println);
     }
 
     @Override
@@ -52,7 +54,7 @@ public class PresenterVet implements VetInterface.Presenter {
         PetParent petParent = createPetParent(visit);
         Vaccine vaccine = obtainVaccineByName(visit[4]);
         if (!pet.getPetType().equals(vaccine.getPetType())) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("La vacuna no es del tipo de la mascota");
         }
         vetVisit.setNumVaccinesUsed(Integer.parseInt(visit[1]));
         vetVisit.setDay(parseVisitDate(visit[5]));
@@ -66,6 +68,7 @@ public class PresenterVet implements VetInterface.Presenter {
         Pet pet = new Pet();
         pet.setName(visit[0]);
         pet.setPetType(PetType.fromDisplayName(visit[2]));
+        pet.setWeight(Integer.parseInt(visit[9]));
         return pet;
     }
 
@@ -138,12 +141,6 @@ public class PresenterVet implements VetInterface.Presenter {
         JSONManager.createJSONFileByCollection(managerProperties.getValue("pathVaccines"), model.getVaccines());
     }
 
-    @Override
-    public String[] obtainPetTypes(){
-        return new String[]{PetType.DOG.getDisplayName(), PetType.CAT.getDisplayName()};
-    }
-
-    @Override
     public void getDataAndSetData() {
         if (!Files.exists(Paths.get(managerProperties.getValue("pathVetVisits"))) && !Files.exists(Paths.get(managerProperties.getValue("pathVaccines")))){
             JSONManager.createJSONFileByCollection(managerProperties.getValue("pathVetVisits"),new ArrayList<>() );
@@ -151,7 +148,7 @@ public class PresenterVet implements VetInterface.Presenter {
         }
         Collection<?> collection = JSONManager.createCollectionByJSONFile(managerProperties.getValue("pathVetVisits"), VetVisit.class);
         Collection<?> collectionVaccines = JSONManager.createCollectionByJSONFile(managerProperties.getValue("pathVaccines"), Vaccine.class);
-        if (collectionVaccines == null || collection == null) {
+        if (collectionVaccines == null || collectionVaccines.isEmpty() || collection == null || collection.isEmpty()) {
             model.setVisits(new ArrayList<>());
             model.setVaccines(new TreeSet<>());
         }
@@ -159,6 +156,11 @@ public class PresenterVet implements VetInterface.Presenter {
             model.setVisits(new ArrayList<>(List.of(Arrays.copyOf(collection.toArray(), collection.size(), VetVisit[].class))));
             model.setVaccines(new TreeSet<>(List.of(Arrays.copyOf(collectionVaccines.toArray(), collectionVaccines.size(), Vaccine[].class))));
         }
+    }
+
+    @Override
+    public String[] obtainPetTypes(){
+        return new String[]{PetType.DOG.getDisplayName(), PetType.CAT.getDisplayName()};
     }
 
     @Override
@@ -171,6 +173,16 @@ public class PresenterVet implements VetInterface.Presenter {
         this.view = view;
     }
 
+    @Override
+    public Object[][] obtainVisitsUpWeight(int i) {
+        return transformToMatrix(model.obtainVisitsUpSpecifiedWeight(i));
+    }
+
+    @Override
+    public Object[][] obtainVisitsDownWeight(int i) {
+        return transformToMatrix(model.obtainVisitsDownSpecifiedWeight(i));
+    }
+
     private Object[][] transformToMatrix(ArrayList<VetVisit> visits) {
         Object[][] data = new Object[visits.size()][10];
         for (int i = 0; i < visits.size(); i++) {
@@ -180,7 +192,7 @@ public class PresenterVet implements VetInterface.Presenter {
     }
 
     private Object[] fillRow(VetVisit visit) {
-        Object[] row = new Object[10];
+        Object[] row = new Object[11];
         row[0] = visit.getPetParent().getName();
         row[1] = visit.getPetParent().getLastName();
         row[2] = visit.getPetParent().getEmailAdress();
@@ -191,6 +203,7 @@ public class PresenterVet implements VetInterface.Presenter {
         row[7] = visit.getVaccineUsed().getName();
         row[8] = visit.getDay();
         row[9] = getVaccineDueDate(visit);
+        row[10] = visit.getPet().getWeight();
         return row;
     }
 
@@ -201,10 +214,10 @@ public class PresenterVet implements VetInterface.Presenter {
         Period difference = Period.between(LocalDate.now(), vaccineExpiryDate);
 
         if (!difference.isNegative()) {
-            return "Faltan " + difference.getMonths() + " meses y " + difference.getDays() + " días";
+            return "Faltan " + difference.getYears() + " años, " + difference.getMonths() + " meses y " + difference.getDays() + " días";
         } else {
             difference = difference.negated();
-            return "La vacuna expiró hace " + difference.getMonths() + " meses y " + difference.getDays() + " días";
+            return "La vacuna expiró hace " + difference.getYears() + " años, " + difference.getMonths() + " meses y " + difference.getDays() + " días";
         }
     }
 }

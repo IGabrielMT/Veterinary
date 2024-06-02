@@ -23,6 +23,16 @@ public class Vaccine implements Comparable<Vaccine> {
 
     @Override
     public int compareTo(Vaccine o) {
-        return Integer.compare(this.dueTime.getDays(), o.dueTime.getDays());
+        int compareDueTime = Integer.compare(this.dueTime.getDays(), o.dueTime.getDays());
+        if (compareDueTime != 0) {
+            return compareDueTime;
+        }
+
+        int compareName = this.name.compareTo(o.name);
+        if (compareName != 0) {
+            return compareName;
+        }
+
+        return this.petType.compareTo(o.petType);
     }
 }

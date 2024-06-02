@@ -18,7 +18,7 @@ public class Table {
         String[] columnNames = {
                 "Nombre del Responsable", "Apellido", "Correo Electronico",
                 "Numero de Telefono", "Nombre de la Mascota", "Tipo de Mascota", "Numero de Vacunas Usadas",
-                "Vacunas Usadas", "Dia de la Cita", "Fecha de Vencimiento de la Vacuna"
+                "Vacunas Usadas", "Dia de la Cita", "Fecha de Vencimiento de la Vacuna", "Peso de la mascota"
         };
         DefaultTableModel model = new DefaultTableModel(null, columnNames){
             @Override

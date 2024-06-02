@@ -12,6 +12,9 @@ import lombok.Setter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 @Getter
@@ -28,6 +31,7 @@ public class WorkPanelAppointmentVet extends JPanel {
     private LimitedTextField email;
     private LimitedTextField ownerLastName;
     private JDialog parent;
+    private NumericTextField weight;
     public WorkPanelAppointmentVet(JDialog parent, VetInterface.Presenter presenterVet){
         this.parent = parent;
         this.presenterVet = presenterVet;
@@ -41,20 +45,31 @@ public class WorkPanelAppointmentVet extends JPanel {
     private void initWorkPanel() {
         setBackground(Global.WORK_BACKGROUND_COLOR);
         setForeground(Global.WORK_TEXT_COLOR);
-        setLayout(new BorderLayout()); // Change to BorderLayout
+        setLayout(new BorderLayout());
     }
     private void createLabelAndText(){
-        JPanel gridPanel = new JPanel(new GridLayout(8, 3, 20, 20)); // Create a new JPanel with GridLayout
+        JPanel gridPanel = new JPanel(new GridLayout(10, 3, 20, 20));
         addFirstAndSecondRow(gridPanel);
         createEmptySpace(gridPanel);
         addFourthRowAndFifth(gridPanel);
         createEmptySpace(gridPanel);
         addSeventhAndNinthRow(gridPanel);
-        int marginSize = 50; // Create a margin size
+        addWeightOption(gridPanel);
+        int marginSize = 50;
         JPanel marginPanel = new JPanel(new BorderLayout());
         marginPanel.add(gridPanel, BorderLayout.CENTER);
         marginPanel.setBorder(BorderFactory.createEmptyBorder(marginSize, marginSize, marginSize, marginSize));
-        add(marginPanel); // Add the marginPanel to the main panel
+        add(marginPanel);
+    }
+
+    private void addWeightOption(JPanel gridPanel) {
+        JLabel label = new JLabel("Peso de la mascota: (en gramos)");
+        label.setFont(Global.FONT_TEXTS);
+        gridPanel.add(label);
+        gridPanel.add(new JLabel(""));
+        gridPanel.add(new JLabel(""));
+        weight = new NumericTextField("");
+        gridPanel.add(weight);
     }
 
     private void addSeventhAndNinthRow(JPanel gridPanel) {
@@ -120,8 +135,16 @@ public class WorkPanelAppointmentVet extends JPanel {
     private JButton createButtonRegister(){
         CustomButton button = new CustomButton("Registrar Cita");
         button.addActionListener(e -> {
-            presenterVet.addVisit(returnData());
-            parent.dispose();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String dateString = sdf.format(dateChooser.getDate());
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate inputDate = LocalDate.parse(dateString, dtf);
+            if (inputDate.isAfter(LocalDate.now())) {
+                presenterVet.addVisit(returnData());
+                parent.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "La fecha ingresada no puede ser anterior a la fecha actual.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         });
         return button;
     }
@@ -141,7 +164,8 @@ public class WorkPanelAppointmentVet extends JPanel {
                 Objects.requireNonNull(dateChooser.getDate()).toString(),
                 phoneNumber.getText(),
                 email.getText(),
-                ownerLastName.getText()
+                ownerLastName.getText(),
+                weight.getText()
         };
     }
 }

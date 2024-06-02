@@ -18,6 +18,11 @@ public interface VetInterface {
         ArrayList<VetVisit> obtainVisitByDate(LocalDate date);
         ArrayList<VetVisit> getVisits();
         TreeSet<Vaccine> getVaccines();
+
+        ArrayList<VetVisit> obtainVisitsUpSpecifiedWeight(int weight);
+
+        ArrayList<VetVisit> obtainVisitsDownSpecifiedWeight(int weight);
+
         void setPresenter(Presenter presenter);
         void setVisits(ArrayList<VetVisit> visits);
         void setVaccines(TreeSet<Vaccine> vaccines);
@@ -46,5 +51,7 @@ public interface VetInterface {
         void getDataAndSetData();
         void setModel(Model model);
         void setView(View view);
+        Object[][] obtainVisitsUpWeight(int i);
+        Object[][] obtainVisitsDownWeight(int i);
     }
 }

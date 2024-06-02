@@ -4,6 +4,7 @@ import co.edu.uptc.interfaces.VetInterface;
 import co.edu.uptc.views.appointments.allAppointments.MainAllAppointments;
 import co.edu.uptc.views.appointments.byDate.MainByDateAppointments;
 import co.edu.uptc.views.appointments.byParent.MainByParentAppointments;
+import co.edu.uptc.views.appointments.byWeight.MainByWeightAppointments;
 import co.edu.uptc.views.mainpage.MainPageFrame;
 import co.edu.uptc.views.wildCardClasses.Global;
 import co.edu.uptc.views.wildCardClasses.LabelHeader;
@@ -45,7 +46,23 @@ public class FooterByNextVaccineAppointments extends JPanel {
         createTitle2(gridPanel);
         createTitle3(gridPanel);
         createTitle4(gridPanel);
+        createTitle5(gridPanel);
     }
+
+    private void createTitle5(JPanel gridPanel) {
+        JLabel all = new LabelHeader("Por peso");
+        all.setFont(Global.FONT_TEXTS);
+        all.setForeground(Global.FOOTER_TEXT_COLOR);
+        all.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                parent.dispose();
+                createByWeight();
+            }
+        });
+        gridPanel.add(all);
+    }
+
     private void createTitle1(JPanel gridPanel){
         JLabel orderBy = new LabelHeader("Ordernar por: ");
         orderBy.setFont(Global.FONT_TITLE_NORMAL);
@@ -102,5 +119,9 @@ public class FooterByNextVaccineAppointments extends JPanel {
     private void createByResponsible(){
         MainByParentAppointments mainByResponsibleAppointments = new MainByParentAppointments(mainPageFrame, presenter);
         mainByResponsibleAppointments.setVisible(true);
+    }
+    private void createByWeight(){
+        MainByWeightAppointments mainByWeightAppointments = new MainByWeightAppointments(mainPageFrame, presenter);
+        mainByWeightAppointments.setVisible(true);
     }
 }
